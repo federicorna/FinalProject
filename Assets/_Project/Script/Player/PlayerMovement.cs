@@ -1,18 +1,22 @@
 
 using UnityEngine;
+
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Movement")]
+    [SerializeField] private float _moveSpeed = 8f;
 
-    [SerializeField] private float _moveSpeed = 5;
-    [SerializeField] private float _mouseSensitivity = 2f;
-    [SerializeField] private float _jumpHeight = 2;
+    [Header("Jump")]
+    [SerializeField] private float _jumpHeight = 3f;
+    [SerializeField] private int _maxJumps = 2;
 
     private Rigidbody _rb;
     private GroundChecker _groundChecker;
+    
+    private int _jumpsDone;
+    private float _h;
+    private bool _jumpRequested;
 
-    private float _v, _h;
-    private float _mouseX;
-    private bool _isJumping;
 
 
     private void Awake()
@@ -21,37 +25,79 @@ public class PlayerMovement : MonoBehaviour
         _groundChecker = GetComponentInChildren<GroundChecker>();
     }
 
+
     void Update()
     {
         _h = Input.GetAxisRaw("Horizontal");
-        _v = Input.GetAxisRaw("Vertical");
 
-        _mouseX += Input.GetAxis("Mouse X") * _mouseSensitivity;
-
-        _isJumping = Input.GetButtonDown("Jump");
-
-        if (_isJumping && _groundChecker.IsGrounded)
+        if (Input.GetButtonDown("Jump") && CanJump())
         {
-            Jump();
+            _jumpRequested = true;
         }
+
+        HandleRotation();
     }
+
 
     void FixedUpdate()
     {
-        Quaternion playerRotation = Quaternion.Euler(0, _mouseX, 0);
-        _rb.MoveRotation(playerRotation);
-
-        Vector3 moveDir = (transform.forward * _v) + (transform.right * _h);
-
-        Vector3 targetPosition = _rb.position + moveDir.normalized * (_moveSpeed * Time.fixedDeltaTime);
-        _rb.MovePosition(targetPosition);
-
+  
+        // Applichiamo la velocità orizzontale mantenendo quella verticale
+        _rb.velocity = new Vector3(_h * _moveSpeed, _rb.velocity.y, 0);
+      
+        if (_jumpRequested)
+        {
+            Jump();
+        }
+        
     }
+
+    //------------------- F.ni
+
+
+    private bool CanJump()
+    {
+        if (_groundChecker.IsGrounded)
+        {
+            _jumpsDone = 0;
+            return true;
+        }
+
+        if (_jumpsDone < _maxJumps)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private void HandleRotation()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Plane groundPlane = new Plane(Vector3.forward, Vector3.zero);
+
+        if (groundPlane.Raycast(ray, out float distance))
+        {
+            Vector3 mousePoint = ray.GetPoint (distance);
+            float targetAngle = (mousePoint.x > transform.position.x) ? 90f : -90f;
+            transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+        }
+    }
+
 
     private void Jump()
     {
-        _rb.AddForce(Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
-        _isJumping = false;
-    }
+        // Reset della velocità verticale prima della spinta. Senza questo, se salto 2 volte, il salto
+        // non e' sempre uguale. 2 veloci salta sulla luna, 2 lenti il secondo rallenta la caduta
+        _rb.velocity = new Vector3(_rb.velocity.x, 0, 0);
 
+        // Formula per calcolare la forza per arrivare alla _jumpHeight, indipendentemente dalla gravita'
+        float jumpForce = Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
+
+        _rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+
+        _jumpsDone++;
+        _jumpRequested = false;
+    }
 }
