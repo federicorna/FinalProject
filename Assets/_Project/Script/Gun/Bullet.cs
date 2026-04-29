@@ -4,11 +4,11 @@ namespace MyGame.Weapons
 {
     public class Bullet : MonoBehaviour
     {
-        [Header("Movement Settings")]
+        [Header("Movimento")]
         [SerializeField] private float _speed = 20f;
         [SerializeField] private float _lifeTime = 3f;
 
-        [Header("Combat Settings")]
+        [Header("Combattimento")]
         private int _damage = 1;
 
         void Start()
@@ -18,11 +18,10 @@ namespace MyGame.Weapons
 
         void Update()
         {
-            // Vector3.up 
-            transform.Translate(Vector3.up * _speed * Time.deltaTime);
+            // Space.Self: si muove nella direzione in cui il proiettile è ruotato
+            transform.Translate(Vector3.up * _speed * Time.deltaTime, Space.Self);
         }
 
-        // Metodo pubblico per permettere al GunManager di impostare il danno
         public void SetDamage(int amount)
         {
             _damage = amount;
@@ -30,16 +29,17 @@ namespace MyGame.Weapons
 
         private void OnTriggerEnter(Collider other)
         {
-            // Se colpisce un nemico (aggiungeremo il tag "Enemy" più avanti)
-            if (other.CompareTag("Enemy"))
-            {
-                // Qui chiameremo la funzione per togliere vita al nemico
-                // other.GetComponent<EnemyHealth>().TakeDamage(_damage);
+            // Cerca HealthComponent sull'oggetto colpito (o nel parent)
+            HealthComponent target = other.GetComponentInParent<HealthComponent>();
 
-                Destroy(gameObject); // Distruggi il proiettile all'impatto
+            if (target != null && !target.IsDead)
+            {
+                target.TakeDamage(_damage);
+                Destroy(gameObject);
+                return;
             }
 
-            // Se colpisce il muro o il pavimento (Tag "Environment")
+            // Distruggi il proiettile se colpisce l'ambiente
             if (other.CompareTag("Ground"))
             {
                 Destroy(gameObject);
