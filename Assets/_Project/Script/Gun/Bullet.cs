@@ -31,7 +31,7 @@ namespace MyGame.Weapons
         {
             // Cerca HealthComponent sull'oggetto colpito (o nel parent)
             HealthComponent target = other.GetComponentInParent<HealthComponent>();
-
+            Debug.Log($"[Bullet] Colpito: {other.gameObject.name} — tag: {other.tag} — layer: {other.gameObject.layer}");
             if (target != null && !target.IsDead)
             {
                 target.TakeDamage(_damage);

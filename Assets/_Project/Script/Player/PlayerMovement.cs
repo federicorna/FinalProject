@@ -23,8 +23,8 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _groundChecker = GetComponentInChildren<GroundChecker>();
+        GetComponent<HealthComponent>().Initialize(1);  /// Qua perche in HealthCondition crea problemi
     }
-
 
     void Update()
     {
@@ -41,19 +41,17 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-  
-        // Applichiamo la velocità orizzontale mantenendo quella verticale
+        /// Applichiamo la velocità orizzontale mantenendo quella verticale
         _rb.velocity = new Vector3(_h * _moveSpeed, _rb.velocity.y, 0);
       
         if (_jumpRequested)
         {
             Jump();
-        }
-        
+        }      
     }
 
-    //------------------- F.ni
 
+    //--[f.ni]--
 
     private bool CanJump()
     {
@@ -71,7 +69,6 @@ public class PlayerMovement : MonoBehaviour
         return false;
     }
 
-
     private void HandleRotation()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -85,14 +82,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     private void Jump()
     {
-        // Reset della velocità verticale prima della spinta. Senza questo, se salto 2 volte, il salto
-        // non e' sempre uguale. 2 veloci salta sulla luna, 2 lenti il secondo rallenta la caduta
+        /// Reset della velocità verticale prima della spinta. Senza questo, se salto 2 volte, il salto
+        /// non e' sempre uguale. 2 veloci salta sulla luna, 2 lenti il secondo rallenta la caduta
         _rb.velocity = new Vector3(_rb.velocity.x, 0, 0);
 
-        // Formula per calcolare la forza per arrivare alla _jumpHeight, indipendentemente dalla gravita'
+        /// Formula per calcolare la forza per arrivare alla _jumpHeight, indipendentemente dalla gravita'
         float jumpForce = Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
 
         _rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);

@@ -10,7 +10,7 @@ namespace MyGame.Weapons
         [SerializeField] private Transform _firePoint;
 
         [Header("Settings")]
-        [SerializeField] private float _fireRate = 0.2f;
+        [SerializeField] private float _fireRate = 1f;
         private float _nextFireTime;
 
         void Update()

@@ -1,18 +1,12 @@
 
 using UnityEngine;
 
-/// <summary>
-/// Gestisce il danno da contatto del nemico al player.
-/// Sta sul prefab nemico. Legge il danno da EnemyController
-/// e lo applica al HealthComponent del player.
-/// </summary>
 [RequireComponent(typeof(EnemyController))]
 public class EnemyContactDamage : MonoBehaviour
 {
-    // Tag che il player DEVE avere nell'Inspector
     private const string PlayerTag = "Player";
-
     private EnemyController _enemyController;
+
 
     private void Awake()
     {
@@ -21,13 +15,18 @@ public class EnemyContactDamage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag(PlayerTag)) return;
+        Debug.Log($"[ContactDamage] Colpito: {other.gameObject.name} | tag: {other.tag} | isTrigger: {other.isTrigger}");
 
-        // Cerca HealthComponent sul player (o nel suo parent)
+        if (!other.CompareTag(PlayerTag))
+        {
+            Debug.Log($"[ContactDamage] Tag non corrispondente. Atteso: {PlayerTag}, ricevuto: {other.tag}");
+            return;
+        }
+
         HealthComponent playerHealth = other.GetComponentInParent<HealthComponent>();
+        Debug.Log($"[ContactDamage] HealthComponent trovato: {playerHealth != null} | IsDead: {playerHealth?.IsDead}");
 
         if (playerHealth == null || playerHealth.IsDead) return;
-
         playerHealth.TakeDamage(_enemyController.GetContactDamage());
     }
 }
