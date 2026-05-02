@@ -11,15 +11,22 @@ namespace MyGame.Weapons
         [Header("Combattimento")]
         private int _damage = 1;
 
+        private Vector3 _direction = Vector3.right;
+
         void Start()
         {
             Destroy(gameObject, _lifeTime);
         }
 
+        public void SetDirection(Vector3 direction)
+        {
+            _direction = direction;
+        }
+
         void Update()
         {
-            // Space.Self: si muove nella direzione in cui il proiettile è ruotato
-            transform.Translate(Vector3.up * _speed * Time.deltaTime, Space.Self);
+            transform.Translate(_direction * _speed * Time.deltaTime, Space.World);
+            //transform.Translate(Vector3.up * _speed * Time.deltaTime, Space.Self);
         }
 
         public void SetDamage(int amount)
@@ -29,9 +36,10 @@ namespace MyGame.Weapons
 
         private void OnTriggerEnter(Collider other)
         {
-            // Cerca HealthComponent sull'oggetto colpito (o nel parent)
+            /// Cerca HealthComponent sull'oggetto colpito o parent
             HealthComponent target = other.GetComponentInParent<HealthComponent>();
             Debug.Log($"[Bullet] Colpito: {other.gameObject.name} — tag: {other.tag} — layer: {other.gameObject.layer}");
+            
             if (target != null && !target.IsDead)
             {
                 target.TakeDamage(_damage);

@@ -33,13 +33,17 @@ public class EnemyAgent : MonoBehaviour
         if (_target == null) return;
 
         NavMeshHit hit;
-
         if (NavMesh.SamplePosition(_target.position, out hit, 1.0f, NavMesh.AllAreas))
-        {
             _lastGroundedTargetPos = hit.position;
-        }
 
-        /// Diamo ultima posizione valida. 
         _agent.SetDestination(_lastGroundedTargetPos);
+
+        // Ruota il nemico verso il player — solo sinistra o destra
+        float directionX = _target.position.x - transform.position.x;
+        if (Mathf.Abs(directionX) > 0.1f)
+        {
+            float targetAngle = directionX > 0 ? 90f : -90f;
+            transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+        }
     }
 }

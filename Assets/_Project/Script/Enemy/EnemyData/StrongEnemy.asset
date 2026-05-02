@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: StrongEnemy
   m_EditorClassIdentifier: 
   EnemyName: Strong
-  MaxHealth: 5
-  MoveSpeed: 3
+  MaxHealth: 6
+  MoveSpeed: 2
   ContactDamage: 1
+  AvoidancePriority: 50

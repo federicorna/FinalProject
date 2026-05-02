@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Boss1Enemy
   m_EditorClassIdentifier: 
   EnemyName: Boss1
-  MaxHealth: 7
+  MaxHealth: 15
   MoveSpeed: 2
   ContactDamage: 1
+  AvoidancePriority: 50

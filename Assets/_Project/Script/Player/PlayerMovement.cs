@@ -12,7 +12,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody _rb;
     private GroundChecker _groundChecker;
-    
+    private PlayerAnimatorController _animatorController;
+
     private int _jumpsDone;
     private float _h;
     private bool _jumpRequested;
@@ -24,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _groundChecker = GetComponentInChildren<GroundChecker>();
         GetComponent<HealthComponent>().Initialize(1);  /// Qua perche in HealthCondition crea problemi
+        _animatorController = GetComponentInChildren<PlayerAnimatorController>();
     }
 
     void Update()
@@ -52,6 +54,8 @@ public class PlayerMovement : MonoBehaviour
 
 
     //--[f.ni]--
+
+    public bool IsGrounded => _groundChecker.IsGrounded;
 
     private bool CanJump()
     {
@@ -94,6 +98,12 @@ public class PlayerMovement : MonoBehaviour
         _rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
 
         _jumpsDone++;
+        _animatorController?.TriggerJump();
         _jumpRequested = false;
+    }
+
+    public void AddSpeed(int amount)
+    {
+        _moveSpeed += amount;
     }
 }

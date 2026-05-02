@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyName: Fast
   MaxHealth: 2
-  MoveSpeed: 5
+  MoveSpeed: 7
   ContactDamage: 1
+  AvoidancePriority: 50

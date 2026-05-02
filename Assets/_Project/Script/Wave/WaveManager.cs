@@ -15,6 +15,11 @@ public class WaveManager : MonoBehaviour
     [Header("Timing portale")]
     [SerializeField] private float _portalOpenDuration = 2f;
 
+    [Header("PowerUp")]
+    [SerializeField] private GameObject _powerUpSpeed;      /// ondata 3
+    [SerializeField] private GameObject _powerUpFireRate;   /// ondata 5
+    [SerializeField] private GameObject _powerUpDamage;     /// ondata 7
+
     private int _enemiesAlive = 0;
     private bool _waveStarted = false;
 
@@ -29,6 +34,8 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator RunWaves()
     {
+        int waveCount = 0;
+
         foreach (WaveData wave in _waves)
         {
             _waveStarted = false;   /// Reset prima di ogni ondata
@@ -36,10 +43,24 @@ public class WaveManager : MonoBehaviour
             yield return StartCoroutine(SpawnWave(wave));
             /// Aspetta che almeno un nemico sia spawnato e poi che siano tutti morti
             yield return new WaitUntil(() => _waveStarted && _enemiesAlive <= 0);
+
+            waveCount++;
+            ActivatePowerUp(waveCount);
+
             yield return new WaitForSeconds(wave.DelayAfterWave);
         }
         Debug.Log("Hai vinto!");
         // Shermata vittoria
+    }
+
+    private void ActivatePowerUp(int completedWave)
+    {
+        if (completedWave == 3 && _powerUpSpeed != null)
+            _powerUpSpeed.SetActive(true);
+        else if (completedWave == 5 && _powerUpFireRate != null)
+            _powerUpFireRate.SetActive(true);
+        else if (completedWave == 7 && _powerUpDamage != null)
+            _powerUpDamage.SetActive(true);
     }
 
     private IEnumerator SpawnWave(WaveData wave)

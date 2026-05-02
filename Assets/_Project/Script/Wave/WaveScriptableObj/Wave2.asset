@@ -15,10 +15,10 @@ MonoBehaviour:
   Enemies:
   - EnemyPrefab: {fileID: 4531083930154564919, guid: 07b1b8639a381c64598ba7a93517dff3,
       type: 3}
-    Count: 2
+    Count: 1
   - EnemyPrefab: {fileID: 4531083930154564919, guid: 72359c8f7eb4fdd498e0094498f507d2,
       type: 3}
-    Count: 2
+    Count: 3
   UseBothPortals: 0
   DelayBetweenSpawns: 1
-  DelayAfterWave: 3
+  DelayAfterWave: 5
