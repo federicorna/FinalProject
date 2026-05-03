@@ -23,6 +23,8 @@ public class MainMenuManager : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        AudioManager.Instance.PlayMenuMusic();
     }
 
 
