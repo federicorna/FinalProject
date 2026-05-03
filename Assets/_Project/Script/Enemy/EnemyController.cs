@@ -32,14 +32,10 @@ public class EnemyController : MonoBehaviour
         _health.OnDamageTaken.RemoveListener(HandleDamageTaken);
     }
 
-    // ----- Handlers degli eventi -----
-
-
     //--[f.ni]--
 
     private void HandleDamageTaken(int currentHp, int maxHp)
     {
-        // Qui puoi: aggiornare una barra HP, far lampeggiare lo sprite, ecc.
         Debug.Log($"{_data.EnemyName} colpito! HP: {currentHp}/{maxHp}");
     }
 

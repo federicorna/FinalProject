@@ -22,7 +22,7 @@ public class PlayerDeathHandler : MonoBehaviour
     private void HandleDeath()
     {
         Debug.Log("[Player] Morto!");
-        // In futuro: GameManager.Instance.GameOver();
         gameObject.SetActive(false);    /// Nasconde il player temporaneamente
+        GameManager.Instance.GameOver();
     }
 }

@@ -32,7 +32,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnPlayButton()
     {
-        StartCoroutine(FadeAndLoad("Level1"));
+        StartCoroutine(FadeAndLoad("Story"));
     }
 
     public void OnCreditsButton()
@@ -50,7 +50,7 @@ public class MainMenuManager : MonoBehaviour
     public void OnQuitButton()
     {
         Application.Quit();
-        Debug.Log("[Menu] Quit");
+        Debug.Log("Quit");
     }
 
 

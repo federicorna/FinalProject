@@ -1,11 +1,15 @@
 ﻿
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
     [Header("Ondate")]
     [SerializeField] private WaveData[] _waves;
+
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI _waveText;
 
     [Header("Portali")]
     [SerializeField] private GameObject _portalPrefab;
@@ -40,6 +44,8 @@ public class WaveManager : MonoBehaviour
         {
             _waveStarted = false;   /// Reset prima di ogni ondata
 
+            UpdateWaveText(waveCount + 1);
+
             yield return StartCoroutine(SpawnWave(wave));
             /// Aspetta che almeno un nemico sia spawnato e poi che siano tutti morti
             yield return new WaitUntil(() => _waveStarted && _enemiesAlive <= 0);
@@ -50,7 +56,13 @@ public class WaveManager : MonoBehaviour
             yield return new WaitForSeconds(wave.DelayAfterWave);
         }
         Debug.Log("Hai vinto!");
-        // Shermata vittoria
+        GameManager.Instance.Victory();
+    }
+
+    private void UpdateWaveText(int current)
+    {
+        if (_waveText != null)
+            _waveText.text = $"Ondata {current}/{_waves.Length}";
     }
 
     private void ActivatePowerUp(int completedWave)
