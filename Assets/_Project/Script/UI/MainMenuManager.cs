@@ -18,7 +18,6 @@ public class MainMenuManager : MonoBehaviour
         _leftPanel.SetActive(true);
         _creditsPanel.SetActive(false);
 
-        // Assicura che il fade parta trasparente
         SetFadeAlpha(0f);
 
         Cursor.visible = true;
@@ -56,7 +55,7 @@ public class MainMenuManager : MonoBehaviour
 
     private IEnumerator FadeAndLoad(string sceneName)
     {
-        // Disabilita i bottoni durante il fade per evitare doppi click
+        /// Disabilita i bottoni durante il fade per evitare click involontari
         _leftPanel.SetActive(false);
 
         float elapsed = 0f;

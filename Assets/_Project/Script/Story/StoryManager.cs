@@ -1,15 +1,15 @@
+using Cinemachine;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 using UnityEngine.UI;
-using System.Collections;
 
 public class StoryManager : MonoBehaviour
 {
-    [Header("Camera")]
-    [SerializeField] private Transform _camera;
-    [SerializeField] private Transform[] _cameraPoints;  // Point1, Point2, Point3
-    [SerializeField] private float _moveDuration = 1.5f;
+    [Header("Cinemachine")]
+    [SerializeField] private CinemachineVirtualCamera[] _vCams;
+    [SerializeField] private CinemachineBrain _brain;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI _storyText;
@@ -24,9 +24,7 @@ public class StoryManager : MonoBehaviour
 
     private void Start()
     {
-        _camera.position = _cameraPoints[0].position;
-        _camera.rotation = _cameraPoints[0].rotation;
-
+        SetActiveVCam(0);
         _storyText.text = _storyLines[0];
         _startButton.SetActive(false);
     }
@@ -48,34 +46,21 @@ public class StoryManager : MonoBehaviour
         if (_currentIndex >= _storyLines.Length - 1) return;
 
         _currentIndex++;
-        StartCoroutine(MoveToNextPoint());
+        StartCoroutine(BlendToNext());
     }
 
-    private IEnumerator MoveToNextPoint()
+    private IEnumerator BlendToNext()
     {
         _isMoving = true;
 
         /// Dissolvenza 
         yield return StartCoroutine(FadeText(0f));
 
-        // Muovi camera
-        Vector3 startPos = _camera.position;
-        Quaternion startRot = _camera.rotation;
-        Vector3 endPos = _cameraPoints[_currentIndex].position;
-        Quaternion endRot = _cameraPoints[_currentIndex].rotation;
+        /// Attiva VCam successiva
+        SetActiveVCam(_currentIndex);
 
-        float elapsed = 0f;
-        while (elapsed < _moveDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.SmoothStep(0f, 1f, elapsed / _moveDuration);
-            _camera.position = Vector3.Lerp(startPos, endPos, t);
-            _camera.rotation = Quaternion.Lerp(startRot, endRot, t);
-            yield return null;
-        }
-
-        _camera.position = endPos;
-        _camera.rotation = endRot;
+        /// Aspetta che il blend finisca
+        yield return new WaitUntil(() => !_brain.IsBlending);
 
         /// Mostra nuovo testo
         _storyText.text = _storyLines[_currentIndex];
@@ -86,6 +71,12 @@ public class StoryManager : MonoBehaviour
             _startButton.SetActive(true);
 
         _isMoving = false;
+    }
+
+    private void SetActiveVCam(int index)
+    {
+        for (int i = 0; i < _vCams.Length; i++)
+            _vCams[i].Priority = (i == index) ? 10 : 0;
     }
 
     private IEnumerator FadeText(float targetAlpha)

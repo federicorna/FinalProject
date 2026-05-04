@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
+
+// Codice preso da unity lesson
+
+
 namespace Unity.AI.Navigation.Samples
 {
     public enum OffMeshLinkMoveMethod

@@ -15,7 +15,7 @@ public class WaveData : ScriptableObject
     public EnemySpawnEntry[] Enemies;
 
     [Header("Portali")]
-    public bool UseBothPortals = false;     /// false = portale random, true = entrambi gli angoli
+    public bool UseBothPortals = false;
 
     [Header("Timing")]
     public float DelayBetweenSpawns = 1f;   /// pausa tra un drop e l'altro

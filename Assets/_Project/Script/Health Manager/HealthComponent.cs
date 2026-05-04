@@ -17,6 +17,7 @@ public class HealthComponent : MonoBehaviour
     public int MaxHealth => _maxHealth;
     public bool IsDead => _isDead;
 
+
     //--[f.ni]--
 
     /// Inizializza la salute 

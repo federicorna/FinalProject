@@ -26,7 +26,6 @@ namespace MyGame.Weapons
         void Update()
         {
             transform.Translate(_direction * _speed * Time.deltaTime, Space.World);
-            //transform.Translate(Vector3.up * _speed * Time.deltaTime, Space.Self);
         }
 
         public void SetDamage(int amount)
@@ -47,7 +46,6 @@ namespace MyGame.Weapons
                 return;
             }
 
-            // Distruggi il proiettile se colpisce l'ambiente
             if (other.CompareTag("Ground"))
             {
                 Destroy(gameObject);

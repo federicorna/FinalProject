@@ -46,5 +46,5 @@ public class EnemyController : MonoBehaviour
 
     /// Pubblic per il danno da contatto con il player
     public int GetContactDamage() => _data != null ? _data.ContactDamage : 0;
-    public string GetEnemyName() => _data != null ? _data.EnemyName : "???";
+    public string GetEnemyName() => _data != null ? _data.EnemyName : "";
 }

@@ -13,7 +13,6 @@ public class GroundChecker : MonoBehaviour
         IsGrounded = Physics.CheckSphere (transform.position, _groundDistance, _groundLayer);
     }
 
-
     private void OnDrawGizmos()
     {
         Gizmos.color = IsGrounded ? Color.green : Color.blue;

@@ -17,7 +17,7 @@ public class EnemyAgent : MonoBehaviour
         if (player != null)
             _target = player.transform;
         else
-            Debug.LogWarning("[EnemyAgent] Nessun GameObject con tag 'Player' trovato in scena!");
+            Debug.LogWarning("[EnemyAgent] Nessun GameObject con tag 'Player' trovato");
     }
 
     private void Update()
@@ -38,7 +38,7 @@ public class EnemyAgent : MonoBehaviour
 
         _agent.SetDestination(_lastGroundedTargetPos);
 
-        // Ruota il nemico verso il player — solo sinistra o destra
+        /// Ruota il nemico verso il player — solo sinistra o destra
         float directionX = _target.position.x - transform.position.x;
         if (Mathf.Abs(directionX) > 0.1f)
         {

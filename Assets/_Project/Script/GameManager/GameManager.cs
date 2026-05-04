@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
-    // Bottoni
     public void OnRetryButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
